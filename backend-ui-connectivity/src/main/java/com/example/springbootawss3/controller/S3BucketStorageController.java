@@ -12,7 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.ByteArrayOutputStream;
+import java.io.*;
+import java.nio.file.Path;
 import java.util.List;
 
 @RestController
@@ -26,12 +27,11 @@ public class S3BucketStorageController {
     }
 
     @PostMapping(value = "/file/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> uploadFile(@RequestParam("fileName") String fileName,
-                                             @RequestParam("file") MultipartFile file) {
+    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
       //   fileName = "Login.jpg";
       //  return new ResponseEntity<>(service.uploadFile(fileName, file), HttpStatus.OK);
 
-      //  fileName = file.getOriginalFilename();
+     String   fileName = file.getOriginalFilename();
         System.out.println("filename: " + fileName);
         String message = "";
     /*
@@ -47,10 +47,22 @@ public class S3BucketStorageController {
     }
 
     @GetMapping("/download")
-    public ResponseEntity<ByteArrayResource> downloadFile(@RequestParam String keyName) {
+    public ResponseEntity<String> downloadFile(@RequestParam String keyName) throws Exception {
         HttpHeaders httpHeaders= new HttpHeaders();
-        httpHeaders.set("content-disposition", "attachment; fileName = " + keyName);
-        return new ResponseEntity<>(service.downloadFile(keyName),httpHeaders, HttpStatus.OK);
+        System.setProperty("Login-Bg.jpg","expert3d/uuid_1694518453/output/output_3d_0.obj");
+        String outputFile = System.getProperty(keyName);
+
+        String outputFileName= outputFile.substring(outputFile.lastIndexOf("/")+1,outputFile.length());
+        ByteArrayResource byteArrayResource = service.downloadFile(keyName);
+        System.out.println("Byte array received for output file");
+        File localOutputFile = new File(System.getProperty("java.io.tmpdir")+ File.separator+outputFileName);
+        System.out.println("outfile path is "+localOutputFile);
+        OutputStream os = new FileOutputStream(localOutputFile);
+        os.write(byteArrayResource.getByteArray());
+        os.close();
+        System.out.println("File save check");
+        httpHeaders.set("content-disposition", "attachment; fileName = " + outputFileName);
+        return new ResponseEntity<>(localOutputFile.getAbsolutePath(),httpHeaders, HttpStatus.OK);
 
       //  return new ResponseEntity<ByteArrayResource>(service.downloadFile("Login-Bg.jpg"), HttpStatus.OK);
     }

@@ -1,11 +1,9 @@
 import './App.css';
 import { useState } from "react";
-import { Canvas } from '@react-three/fiber';
 import { useGLTF, PerspectiveCamera, OrbitControls } from '@react-three/drei';
-import { Button, Nav } from 'react-bootstrap';
 import "bootstrap/dist/css/bootstrap.css";
 import Sidebar1 from './Sidebar1';
-import Home from './Home';
+import Home from './pages/Home';
 
 
 
@@ -21,7 +19,7 @@ function App() {
         <div className='col'>
           <Home />
         </div>
-
+    
       </div>
     </div>
 

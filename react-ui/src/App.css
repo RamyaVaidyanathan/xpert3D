@@ -54,7 +54,7 @@ input:checked+.slider::before {
   transform: translateX(39px);
 }
 
-#container {
-	width: 800px;
-	margin: auto;
+.customPadding {
+  padding-left: 45%;
 }
+

@@ -32,14 +32,17 @@ public class S3BucketStorageService {
     /**
      * Upload file into AWS S3
      *
-     * @param keyName
+     * @param fileName
      * @param file
      * @return String
      */
-    public String uploadFile(String keyName, MultipartFile file) {
+    public String uploadFile(String fileName, MultipartFile file) {
         try {
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentLength(file.getSize());
+            String rootPath = "expert3d/uuid_" + getEpoc() ;
+            String keyName = rootPath + "/input/" + fileName;
+            System.setProperty(fileName, rootPath + "/output/output_3d_0.obj") ;
             amazonS3Client.putObject(bucketName, keyName, file.getInputStream(), metadata);
             return "File uploaded: " + keyName;
         } catch (IOException ioe) {
@@ -51,7 +54,7 @@ public class S3BucketStorageService {
             logger.info("AmazonClientException Message: " + clientException.getMessage());
             throw clientException;
         }
-        return "File not uploaded: " + keyName;
+        return "File not uploaded: " + fileName;
     }
 
     /**
@@ -74,7 +77,9 @@ public class S3BucketStorageService {
      */
     public ByteArrayResource downloadFile(String keyName) {
         try {
-            S3Object s3object = amazonS3Client.getObject(new GetObjectRequest(bucketName, keyName));
+
+            String outputPath = System.getProperty(keyName);
+            S3Object s3object = amazonS3Client.getObject(new GetObjectRequest(bucketName, outputPath));
 
             InputStream is = s3object.getObjectContent();
             ByteArrayResource outputResource = new ByteArrayResource(is.readAllBytes());
@@ -131,5 +136,17 @@ public class S3BucketStorageService {
 
         return keys;
     }
+
+    public String getEpoc() {
+
+        long currentTimeMillis = System.currentTimeMillis();
+
+        // Convert milliseconds to seconds (divide by 1000)
+        long epochTimeInSeconds = currentTimeMillis / 1000;
+
+     //   System.out.println("Epoch Time (in seconds): " + epochTimeInSeconds);
+        return String.valueOf(epochTimeInSeconds);
+    }
+
 
 }
