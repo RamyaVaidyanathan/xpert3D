@@ -68,11 +68,11 @@ public class S3BucketStorageController {
     }
 
     @GetMapping("/preview")
-    public ResponseEntity<ByteArrayResource> previewFile(@RequestParam String fileName) throws Exception {
+    public ResponseEntity<ByteArrayResource> previewFile(@RequestParam String keyName) throws Exception {
         HttpHeaders httpHeaders= new HttpHeaders();
 
-        System.out.println("File to download: " + fileName);
-        return new ResponseEntity<ByteArrayResource>(service.downloadFile(fileName),HttpStatus.OK);
+        System.out.println("File to download: " + keyName);
+        return new ResponseEntity<ByteArrayResource>(service.downloadFile(keyName),HttpStatus.OK);
 
 
     }
