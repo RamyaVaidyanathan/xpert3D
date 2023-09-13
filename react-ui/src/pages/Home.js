@@ -10,8 +10,8 @@ import { OBJLoader } from 'three/examples/jsm/loaders/OBJLoader';
 const outputFormats = ["OBJ", "GLB", "GLTF"];
 
 export function MyModel() {
-    const obj = useLoader(OBJLoader, 'C:/Users/desai/AppData/Local/Temp/output_3d_0.obj');
-
+    const obj = useLoader(OBJLoader, 'http://localhost:8085/preview?keyName=abcd.jpg');
+    
     return (
         <primitive object={obj} />
     )
