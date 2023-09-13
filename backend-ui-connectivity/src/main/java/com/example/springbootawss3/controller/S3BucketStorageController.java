@@ -49,7 +49,7 @@ public class S3BucketStorageController {
     @GetMapping("/download")
     public ResponseEntity<String> downloadFile(@RequestParam String keyName) throws Exception {
         HttpHeaders httpHeaders= new HttpHeaders();
-        System.setProperty("Login-Bg.jpg","expert3d/uuid_1694518453/output/output_3d_0.obj");
+        //System.setProperty("Login-Bg.jpg","expert3d/uuid_1694518453/output/output_3d_0.obj");
         String outputFile = System.getProperty(keyName);
 
         String outputFileName= outputFile.substring(outputFile.lastIndexOf("/")+1,outputFile.length());
@@ -66,5 +66,16 @@ public class S3BucketStorageController {
 
       //  return new ResponseEntity<ByteArrayResource>(service.downloadFile("Login-Bg.jpg"), HttpStatus.OK);
     }
+
+    @GetMapping("/preview")
+    public ResponseEntity<ByteArrayResource> previewFile(@RequestParam String fileName) throws Exception {
+        HttpHeaders httpHeaders= new HttpHeaders();
+
+        System.out.println("File to download: " + fileName);
+        return new ResponseEntity<ByteArrayResource>(service.downloadFile(fileName),HttpStatus.OK);
+
+
+    }
+
 
 }

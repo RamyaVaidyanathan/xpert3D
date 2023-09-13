@@ -72,24 +72,20 @@ public class S3BucketStorageService {
     /**
      * Downloads file using amazon S3 client from S3 bucket
      *
-     * @param keyName
+     * @param fileName
      * @return ByteArrayOutputStream
      */
-    public ByteArrayResource downloadFile(String keyName) {
+    public ByteArrayResource downloadFile(String fileName) {
         try {
 
-            String outputPath = System.getProperty(keyName);
+            System.out.println("fileName to download: " + fileName);
+            String outputPath = System.getProperty(fileName);
+            System.out.println("outputPath: " + outputPath);
             S3Object s3object = amazonS3Client.getObject(new GetObjectRequest(bucketName, outputPath));
 
             InputStream is = s3object.getObjectContent();
             ByteArrayResource outputResource = new ByteArrayResource(is.readAllBytes());
-          /*  ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            int len;
-            byte[] buffer = new byte[4096];
-            while ((len = is.read(buffer, 0, buffer.length)) != -1) {
-                outputStream.write(buffer, 0, len);
-            }
-            return outputStream;*/
+            System.out.println("returning response ");
             return outputResource;
         } catch (IOException ioException) {
             logger.error("IOException: " + ioException.getMessage());
