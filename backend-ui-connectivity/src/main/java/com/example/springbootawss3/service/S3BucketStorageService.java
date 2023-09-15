@@ -41,7 +41,7 @@ public class S3BucketStorageService {
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentLength(file.getSize());
             String rootPath = "expert3d/uuid_" + getEpoc() ;
-            String keyName = rootPath + "/input/" + fileName;
+            String keyName = rootPath + "/input/" + "input_" + fileName;
             System.setProperty(fileName, rootPath + "/output/output_3d_0.obj") ;
             amazonS3Client.putObject(bucketName, keyName, file.getInputStream(), metadata);
             return "File uploaded: " + keyName;
