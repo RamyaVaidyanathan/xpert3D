@@ -28,26 +28,16 @@ public class S3BucketStorageController {
 
     @PostMapping(value = "/file/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
-      //   fileName = "Login.jpg";
-      //  return new ResponseEntity<>(service.uploadFile(fileName, file), HttpStatus.OK);
 
      String   fileName = file.getOriginalFilename();
         System.out.println("filename: " + fileName);
         String message = "";
-    /*
-        try{
-             service.uploadFile(fileName, file.getInputStream());
-                message = "Your file has been uploaded successfully!";
-            }catch(Exception ex) {
-                message = "Error uploading file: " + ex.getMessage();
-            }
-    */
 
         return new ResponseEntity<>(service.uploadFile(fileName, file), HttpStatus.OK);
     }
 
     @GetMapping("/download")
-    public ResponseEntity<String> downloadFile(@RequestParam String keyName) throws Exception {
+    public ResponseEntity<ByteArrayResource> downloadFile(@RequestParam String keyName) throws Exception {
         HttpHeaders httpHeaders= new HttpHeaders();
         //System.setProperty("Login-Bg.jpg","expert3d/uuid_1694518453/output/output_3d_0.obj");
         String outputFile = System.getProperty(keyName);
@@ -62,9 +52,8 @@ public class S3BucketStorageController {
         os.close();
         System.out.println("File save check");
         httpHeaders.set("content-disposition", "attachment; fileName = " + outputFileName);
-        return new ResponseEntity<>(localOutputFile.getAbsolutePath(),httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(service.downloadFile(keyName),httpHeaders, HttpStatus.OK);
 
-      //  return new ResponseEntity<ByteArrayResource>(service.downloadFile("Login-Bg.jpg"), HttpStatus.OK);
     }
 
     @GetMapping("/preview")
