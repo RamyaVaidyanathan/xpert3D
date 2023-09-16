@@ -1,14 +1,14 @@
 import React from "react";
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import xpert3DLogo from './xpert3DLogo.png';
 
 function Sidebar1() {
     return (
-       
-           <div className="bg-white sidebar p-2">
+
+        <div className="bg-white sidebar p-2">
             <div>
-                <i className="bi bi-sun me-2 fs-4"></i>
-                <span className="brand-name fs-4">Xpert3D</span>
+                <img src={xpert3DLogo} alt="Xpert3D Logo" className="w-100" />
             </div>
             <hr className="text-dark"></hr>
             <div className="list-group list-group-flush">
@@ -25,8 +25,8 @@ function Sidebar1() {
                     <span className="fs-5">Video to 3D</span>
                 </a>
             </div>
-           </div>
-       
+        </div>
+
     )
 }
 
