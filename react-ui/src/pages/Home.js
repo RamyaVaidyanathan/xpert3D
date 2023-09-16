@@ -11,28 +11,26 @@ const outputFormats = ["OBJ", "GLB", "GLTF"];
 
 
 
-
-const MyModel = () => {
-    const groupRef = useRef();
-
-    // Use useLoader to load the OBJ model
-    const loadedObject = useLoader(OBJLoader, 'http://15.207.203.116:8085/preview?keyName=abcd.jpg');
-
-    return (
-        <group ref={groupRef}>
-            {/* Use the loadedObject directly */}
-            {loadedObject && <primitive object={loadedObject} />}
-        </group>
-    );
-};
-
-
 function Home() {
     const [isOpen, setIsOpen] = useState(false);
     const [file, setFile] = useState(null);
     const [msg, setMsg] = useState(null);
     //const [selectedOutput, setSelectedOutput] = useState("Output Format");
     const [downloadFileName, setDownloadFileName] = useState(null);
+
+    const MyModel = () => {
+        const groupRef = useRef();
+        const url = 'http://15.207.203.116:8085/preview?keyName='+ downloadFileName;
+        // Use useLoader to load the OBJ model
+        const loadedObject = useLoader(OBJLoader, url);
+
+        return (
+            <group ref={groupRef}>
+                {/* Use the loadedObject directly */}
+                {loadedObject && <primitive object={loadedObject} />}
+            </group>
+        );
+    };
 
     const downloadImage = () => {
 
@@ -46,10 +44,9 @@ function Home() {
             mode: 'no-cors'
         }).then(res => {
             return res.blob();
-        }).then(blob => {
-            window.open(url, '_self')
+        }).then(response => {
+            console.log(response);
         }).catch(err => console.error(err));
-
     }
 
     const uploadImage = () => {
@@ -63,6 +60,7 @@ function Home() {
             body: submitForm,
             mode: 'no-cors'
         }).then(response => console.log(response)).catch(error => console.log(error))
+        window.alert("Image uploaded successfully")
     }
     return (
         <div className="px-3">
@@ -71,10 +69,10 @@ function Home() {
                 <div className="row">
                     <div className="col-sm p-4 bg-white rounded">
                         <div>
-                            <span className="fs-4">Upload Images</span>
+                            <span className="fs-4">Upload Image</span>
                             <br />
                             <br />
-                            <span className="fs-8">Upload one or more Images</span>
+                            <span className="fs-8">Upload image to generate 3D model</span>
                             <br />
                             <br />
 
@@ -87,26 +85,26 @@ function Home() {
 
                         </div>
                     </div>
-                    <div className="col-sm">
-                        <div className="p-4 bg-white rounded">
-                            <div>
-                                <div className="col-sm">
+                    {/*<div className="col-sm">*/}
+                    {/*    <div className="p-4 bg-white rounded">*/}
+                    {/*        <div>*/}
+                    {/*            <div className="col-sm">*/}
 
-                                    <label className="me-3 fs-4">Preview Model</label>
-                                    <br />
-                                    <br />
-                                    <span className="fs-8">Click on the switch below to preview the model</span>
-                                    <br />
-                                    <br />
-                                    <label className='switch'>
-                                        <input type='checkbox' checked={isOpen} onClick={() => setIsOpen(!isOpen)} />
-                                        <span className='slider' />
-                                    </label>
+                    {/*                <label className="me-3 fs-4">Preview Model</label>*/}
+                    {/*                <br />*/}
+                    {/*                <br />*/}
+                    {/*                <span className="fs-8">Click on the switch below to preview the model</span>*/}
+                    {/*                <br />*/}
+                    {/*                <br />*/}
+                    {/*                <label className='switch'>*/}
+                    {/*                    <input type='checkbox' checked={isOpen} onClick={() => setIsOpen(!isOpen)} />*/}
+                    {/*                    <span className='slider' />*/}
+                    {/*                </label>*/}
 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {/*            </div>*/}
+                    {/*        </div>*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
                     <div className="col-sm">
                         <div className="p-4 bg-white rounded">
                             <div>
@@ -114,16 +112,14 @@ function Home() {
                                     <span className="fs-4">Generate Model</span>
                                     <br />
                                     <br />
-                                    <span className="fs-8">Select the output format and click on generate button below to generate and download the model</span>
-                                    <br />
+                                    <span className="fs-8">Click button below to generate, download and preview the model</span>
                                     <br />
 
-                                    <label>Input the File Name to download model</label>
+                                    <label>File Name</label> <br />
                                     <input type='text' onChange={(event) => setDownloadFileName(event.target.value)} />
                                     <br />
                                     <br />
-                                    <br />
-                                    <Button onClick={() => downloadImage()}>Generate</Button>
+                                    <Button onClick={() => {downloadImage();setIsOpen(!isOpen)}}>Generate & Preview</Button>
                                     <br />
                                     <br />
 
