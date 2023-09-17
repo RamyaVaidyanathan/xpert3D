@@ -48,7 +48,7 @@ function Home() {
         }).then(res => {
             return res.blob();
         }).then(response => {
-            console.log(response);
+            window.open(url, '_self')
         }).catch(err => console.error(err));
     }
 
