@@ -1,6 +1,7 @@
 import { React, useState ,useRef, useEffect } from "react";
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
+import '../index.css';
 import Mynav from "../Mynav";
 import { Canvas, useLoader, useThree } from '@react-three/fiber';
 import { useGLTF, PerspectiveCamera, OrbitControls } from '@react-three/drei';
@@ -114,9 +115,9 @@ function Home() {
                                     <br />
                                     <span className="fs-8">Click button below to generate, download and preview the model</span>
                                     <br />
+                                    <br />
 
-                                    <label>File Name</label> <br />
-                                    <input type='text' onChange={(event) => setDownloadFileName(event.target.value)} />
+                                    <input type='text' onChange={(event) => setDownloadFileName(event.target.value)} placeholder="filename" className="italic-placeholder" />
                                     <br />
                                     <br />
                                     <Button onClick={() => {downloadImage();setIsOpen(!isOpen)}}>Generate & Preview</Button>
