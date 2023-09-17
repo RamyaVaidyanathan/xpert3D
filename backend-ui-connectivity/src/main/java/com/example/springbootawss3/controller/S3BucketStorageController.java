@@ -14,7 +14,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class S3BucketStorageController {
@@ -27,13 +29,18 @@ public class S3BucketStorageController {
     }
 
     @PostMapping(value = "/file/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<Map<String, String>> uploadFile(@RequestParam("file") MultipartFile file) {
 
-     String   fileName = file.getOriginalFilename();
+        String fileName = file.getOriginalFilename();
         System.out.println("filename: " + fileName);
-        String message = "";
-
-        return new ResponseEntity<>(service.uploadFile(fileName, file), HttpStatus.OK);
+        Map<String, String> uploadStatus = new HashMap<>();
+        try {
+            service.uploadFile(fileName, file);
+            uploadStatus.put("uploadStatus", "File uploaded successfully");
+        } catch (Exception ex) {
+            uploadStatus.put("uploadStatus", "File failed to upload");
+        }
+        return new ResponseEntity<>(uploadStatus, HttpStatus.OK);
     }
 
     @GetMapping("/download")

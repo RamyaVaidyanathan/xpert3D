@@ -18,6 +18,8 @@ function Home() {
     const [msg, setMsg] = useState(null);
     //const [selectedOutput, setSelectedOutput] = useState("Output Format");
     const [downloadFileName, setDownloadFileName] = useState(null);
+    const [uploadResponse, setUploadResponse] = useState('');
+
 
     const MyModel = () => {
         const groupRef = useRef();
@@ -60,8 +62,7 @@ function Home() {
             method: 'POST',
             body: submitForm,
             mode: 'no-cors'
-        }).then(response => console.log(response)).catch(error => console.log(error))
-        window.alert("Image uploaded successfully")
+        }).then(response => response.json()).then(json => setUploadResponse(json)).catch(error => console.log(error))
     }
     return (
         <div className="px-3">
@@ -83,7 +84,13 @@ function Home() {
                             <Button onClick={() => uploadImage()}>Upload</Button>
                             <br />
                             <br />
+                            { uploadResponse &&
 
+                                <div>
+                                    {uploadResponse.uploadStatus}
+                                </div>
+
+                            }
                         </div>
                     </div>
                     {/*<div className="col-sm">*/}
